@@ -4,6 +4,12 @@ import * as path from 'path';
 
 const TARGET_URL = 'https://solvente-ai-powered-charter-flight-management-358485273829.us-west1.run.app/#/atc-portal';
 const SCREENSHOTS_DIR = path.join(__dirname, '..', 'screenshots');
+const MAX_FILENAME_LENGTH = 30;
+const ANIMATION_WAIT_MS = 500;
+
+async function navigateToPortal(page: import('@playwright/test').Page): Promise<void> {
+  await page.goto(TARGET_URL, { waitUntil: 'networkidle' });
+}
 
 test.describe('ATC Portal Full-Page Screenshots', () => {
   test.beforeAll(async () => {
@@ -15,7 +21,7 @@ test.describe('ATC Portal Full-Page Screenshots', () => {
 
   test('Take full-page screenshots of all pages by clicking all buttons', async ({ page }) => {
     // Navigate to the ATC portal and wait for network idle
-    await page.goto(TARGET_URL, { waitUntil: 'networkidle' });
+    await navigateToPortal(page);
     
     // Take initial screenshot of the landing page
     await page.screenshot({
@@ -56,7 +62,7 @@ test.describe('ATC Portal Full-Page Screenshots', () => {
 
         // Get button text for naming the screenshot
         const buttonText = await button.textContent() || `button-${i}`;
-        const sanitizedButtonText = buttonText.replace(/[^a-zA-Z0-9]/g, '-').substring(0, 30);
+        const sanitizedButtonText = buttonText.replace(/[^a-zA-Z0-9]/g, '-').substring(0, MAX_FILENAME_LENGTH);
         
         console.log(`Clicking button ${i}: "${buttonText}"`);
         
@@ -67,7 +73,7 @@ test.describe('ATC Portal Full-Page Screenshots', () => {
         await page.waitForLoadState('networkidle');
         
         // Small additional wait for any animations
-        await page.waitForTimeout(500);
+        await page.waitForTimeout(ANIMATION_WAIT_MS);
         
         // Take full-page screenshot
         const screenshotPath = path.join(SCREENSHOTS_DIR, `page-after-${sanitizedButtonText}-${i}.png`);
@@ -85,12 +91,12 @@ test.describe('ATC Portal Full-Page Screenshots', () => {
         }
 
         // Navigate back to the original page to find more buttons
-        await page.goto(TARGET_URL, { waitUntil: 'networkidle' });
+        await navigateToPortal(page);
         
       } catch (error) {
         console.log(`Error clicking button ${i}: ${error}`);
         // Navigate back to the original page in case of error
-        await page.goto(TARGET_URL, { waitUntil: 'networkidle' });
+        await navigateToPortal(page);
       }
     }
 
