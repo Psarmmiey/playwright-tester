@@ -1,0 +1,21 @@
+{
+  "name": "playwright-tester",
+  "version": "1.0.0",
+  "description": "Playwright multi-project testing framework",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm run test:project1",
+    "test:project1": "npx playwright test --config=project1/playwright.config.ts",
+    "test:project1:headed": "npx playwright test --config=project1/playwright.config.ts --headed",
+    "test:project1:debug": "npx playwright test --config=project1/playwright.config.ts --debug"
+  },
+  "keywords": ["playwright", "testing", "typescript", "automation"],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.57.0",
+    "@types/node": "^24.10.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  }
+}
