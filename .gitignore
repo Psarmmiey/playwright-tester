@@ -5,6 +5,3 @@ playwright-report/
 playwright/.cache/
 *.log
 .DS_Store
-
-# Screenshots are generated during test runs
-project1/screenshots/
